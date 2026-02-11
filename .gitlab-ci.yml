@@ -1,0 +1,19 @@
+stages:
+  - build
+
+build_images:
+  stage: build
+  image: docker:latest
+
+  services:
+    - docker:dind
+
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+
+  script:
+    - docker version
+    - docker build -t my-app ./app
+    - docker build -t my-nginx ./nginx
+    - docker compose up -d --build
